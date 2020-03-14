@@ -1,3 +1,10 @@
+
+
+/**
+ * Spoorthi Gowda
+ * 
+ * Homeowork 7 part 1
+ */
 public class ArrayDictionary implements Dictionary {
     private int capacity;
     private int count;
@@ -47,7 +54,6 @@ public class ArrayDictionary implements Dictionary {
             pNewNode = ptr;
             ptr = ptr.next;
         }
-
         // add an entry to the end of the chain
         pNewNode.next = new KVEntry(key, value);
         return true;
@@ -58,25 +64,70 @@ public class ArrayDictionary implements Dictionary {
     @Override
     public boolean remove(int key) {
         // homework
+    	if (this.isEmpty()) {
+    		return false;
+	}
+    	int hashedKey = hashFunction(key);
+    	if (entries[hashedKey] != null) {
+    		KVEntry current = entries[hashedKey];
+    		KVEntry temp = null;
+    		KVEntry previous = null;
+            while(current!=null) {
+            	if (current.key==key) {
+            		if (previous==null) {
+            			entries[hashedKey] = current.next;
+					} else {
+						previous.next = current.next;
+						entries[hashedKey] = previous;
+					}
+            		return true;
+		}
+            	previous = current;
+            	current = current.next;
+            }
+        }
         return false;
     }
 
+    
     // Return true when the dictionary contains an entry
     // with the key
     @Override
     public boolean contains(int key) {
         // homework
+        if (this.isEmpty()) {
+            return false;
+        }
+        int hashedKey = hashFunction(key);
+        if (entries[hashedKey] != null) {
+            KVEntry entry = entries[hashedKey];
+            while(entry!=null) {
+                if (entry.key==key) {
+                    return true;
+                }
+                entry = entry.next;
+            }
+        }
         return false;
     }
+
 
     // Return the entry value with the given key
     // Return null if no entry exists with the given key
     @Override
     public Integer get(int key) {
         // NOT IMPLEMENTED
-        return null;
+        int hashedKey = hashFunction(key);
+        if( entries[hashedKey] != null ) {
+            return entries[hashedKey].key;
+        } else {
+            return null;
+        }
     }
 
+    
+      
+    
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
